@@ -1,0 +1,17 @@
+eclipse.preferences.version=1
+encoding//WebRoot/css/admin/admin1.css=UTF-8
+encoding//WebRoot/css/login.css=UTF-8
+encoding//src/com/sharebook/action/AdminAction.java=UTF-8
+encoding//src/com/sharebook/action/UserAction.java=UTF-8
+encoding//src/com/sharebook/biz/AdminBiz.java=UTF-8
+encoding//src/com/sharebook/biz/UserBiz.java=UTF-8
+encoding//src/com/sharebook/biz/impl/AdminBizImpl.java=UTF-8
+encoding//src/com/sharebook/biz/impl/UserBizImpl.java=UTF-8
+encoding//src/com/sharebook/dao/AdminDao.java=UTF-8
+encoding//src/com/sharebook/dao/MybatisBaseDao.java=UTF-8
+encoding//src/com/sharebook/dao/UserDao.java=UTF-8
+encoding//src/com/sharebook/entity/Admin.java=UTF-8
+encoding//src/com/sharebook/entity/User.java=UTF-8
+encoding//src/com/sharebook/util/UUIDUtils.java=UTF-8
+encoding/<project>=UTF-8
+encoding/sql.txt=UTF-8

@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jQuery点击圆形边框弹出图片信息 - xw素材网</title>
+<link rel="stylesheet"	href="css/style.css" media="screen">
+<script src="js/jquery-1.7.1.js"></script>
+<body>
+<div id="teamcont" >
+	<div style="width:780px;margin:30px auto; text-align:center">
+			
+			
+			<div class="parinforma cssshadow">
+				<div class="closebtn"></div>
+				<div class="showLeft">
+					<div class="partener">
+						<img class="row1" src="img/partner/team2.jpg" >
+						<div class="pname">展示</div>
+						<div class="pinfo">合伙人</div>
+					</div>
+				</div>
+				<div class="showRight">
+					<div class="huncontent">	
+					2010-2012:曾就职于金元比联基金, 民生证券，担任行业分析助理; 参与调研并撰</div>
+				</div>
+				<div style="clear:both"></div>
+			</div>
+			
+			<div id="pichuan">
+				<div class="partener">
+					<img class="row1" src="img/partner/team8.jpg" >
+					<div class="pname">展示</div>
+					<div class="pinfo">合伙人</div>
+				</div>
+				
+				<div style="clear:both"></div> 
+			</div>
+	</div>		
+</div>	
+<script type="text/javascript">
+
+$("#pichuan .row1").click(function(){
+	var picIndex=$("#pichuan .row1").index($(this));
+	$(".parinforma").hide();
+	$("#pichuan").hide();
+	$(".parinforma").eq(picIndex).slideDown("normal");
+})
+
+$("#teamcont .closebtn").click(function(){
+	$(".parinforma").hide();
+	$("#pichuan").show();
+})
+</script>
+
+</body>
+</html>

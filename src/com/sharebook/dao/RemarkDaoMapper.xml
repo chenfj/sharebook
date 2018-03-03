@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sharebook.dao.RemarkDao">
+  <resultMap type="com.sharebook.entity.RemarkVo" id="RemarkVoMap">
+  		<id column="rid" property="rid"></id>
+  		<result column="remark_time" property="remarkTime"/>
+  		<result column="content" property="content"/>
+  		<result column="bid" property="bid"/>
+  		<result column="usid" property="usid"/>
+  		<result column="nick_name" property="nickName"/>
+  		<result column="head_img" property="headimg"/>
+  		<result column="remark_state" property="remarkState"/>
+  		
+  </resultMap>
+  <resultMap type="com.sharebook.entity.RemarkBookUserVo" id="rbuv">
+  		<id column="rid" property="rid"/>
+  		<result column="login_name" property="loginName"/>
+  		<result column="content" property="content"/>
+  		<result column="remark_time" property="remarkTime"/>
+  		<result column="book_name" property="bookName"/>
+  		<result column="nick_name" property="nickName"/>
+  		<result column="head_img" property="headimg"/>
+  </resultMap>
+	<select id="findMyBookRemarks" parameterType="long" resultMap="RemarkVoMap">
+		select remark.*,user_info.nick_name,user_info.head_img from remark,user_info where user_info.usid=remark.usid and remark_state=0 and bid=#{bid} 
+	</select>
+	<insert id="addRemark" parameterType="com.sharebook.entity.Remark">
+		insert into remark(rid,remark_time,content,usid,bid,remark_state) values(seq_rid.nextval,#{remarkTime},#{content},#{user.usid},#{book.bid},#{remarkState})
+	</insert>
+	<select id="findAllRemarks"  resultMap="rbuv">
+		select rb2.* from (select rb.* from (select rownum rn,remark.rid,user_info.login_name,remark.content,book.book_name,remark.remark_time from remark,book,user_info where remark.usid=user_info.usid and remark.bid=book.bid and remark.remark_state=0)rb where rb.rn&gt;(#{pc}-1)*#{ps})rb2 where rb2.rn&lt;=#{pc}*#{ps}
+	</select>
+	<select id="countAllRemarks" resultType="int">
+		select count(*) from remark where remark.remark_state=0
+	</select>
+	<select id="findGreatRemark" resultMap="rbuv">
+		select rb.* from (select rownum rn,remark.rid,user_info.login_name,user_info.head_img,user_info.nick_name,remark.content,book.book_name,remark.remark_time from remark,book,user_info where remark.usid=user_info.usid and remark.bid=book.bid and remark.remark_state=0)rb where rb.rn&lt;=6
+	</select>
+	<select id="findSomeNewRemark" resultMap="rbuv">
+		select rb2.* from (select rb.* from (select rownum rn,remark.rid,user_info.login_name,user_info.head_img,user_info.nick_name,remark.content,book.book_name,remark.remark_time from remark,book,user_info where remark.usid=user_info.usid and remark.bid=book.bid and remark.remark_state=0)rb where rb.rn&gt;(#{pageNum}-1)*6)rb2 where rb2.rn&lt;=#{pageNum}*6
+	</select>
+	<update id="delRemark" parameterType="long">
+		update remark set remark_state=1 where rid = #{rid}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

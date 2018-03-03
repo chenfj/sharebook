@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<title>网站介绍</title>
+		<meta name="Keywords" content="关键字,关键字">
+		<meta name="description" content="">
+		<style type="text/css">
+			* {margin:0px;padding:0px;}
+			.xs:hover{cursor:pointer;}
+			#gray{width:100%;height:100%;background:rgba(0,0,0,0.5);position:absolute;top:0px;display:none;}
+			#login{width:600px;height:350px;background:#FFF;position:absolute;left:400px;top:150px;display:none;}
+			#login .title{width:600px;height:45px;background:#FF9933;color:#FFF;font-size:18px;font-family:"微软雅黑";line-height:45px;
+				text-indent:35px;}
+			#login .title:hover{cursor:pointer;}
+			#login .title a{color:#DDD;font-size:24px;text-decoration:none;float:right;margin-right:10px;}
+			#login .title a:hover{color:#FFF;}
+			#login p.info{font-size:12px;font-family:"微软雅黑";color:#666;margin:20px;}				
+			#login #lg{width:315px;height:190px;margin:15px auto 0px;}
+			#login #lg p{font- size:16px;font-family:"微软雅黑";margin-bottom:15px;}
+			#login #lg p input.txt{width:260px;height:35px;border:1px solid #DDD;border-radius:3px;}
+			#login #lg p input.but{width:263px;height:40px;background:url("images/but_bg1.jpg"); border:0px;margin-left:32px;}
+		</style>
+	</head>
+
+	<body>
+		<span class="xs">网站介绍</span>
+		<div id="gray"></div>
+		<div id="login">
+			<div class="title">用户登录<a href="#" class="close">X</a></div>
+			<p class="info">
+				<!--align="absmiddle"	据对集中-->
+				<img src="images/new.png" width="40" height="40" align="absmiddle"/>
+				欢迎来到eagle天堂
+			</p>
+			<div id="lg">
+				<form>
+					<p>账号<input type="text" class="txt"/></p>
+					<p>密码<input type="password" class="txt"/></p>
+					<p><input type="submit" class="but" value=""/></p>
+				</form>
+			</div>
+		</div>
+		
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+		<script type="text/javascript">
+			//点击登录显示功能
+			$("span.xs").click(function() {
+				$("#gray").show();
+				$("#login").show();
+				setCenter();
+			});
+
+			//点击关闭按钮 关闭功能
+			$("a.close").click(function() {
+				$("#gray").hide();
+				$("#login").hide();
+			});
+
+			//当动态改变浏览器窗口时，也要水平居中
+			$(window).resize(function() {
+				setCenter();
+			});
+
+			function setCenter() {
+				var _top = ($(window).height() - $("#login").height()) / 2;
+				var _left = ($(window).width() - $("#login").width()) / 2;
+
+				//改变值
+				$("#login").css({top:_top,left:_left});
+			}
+
+			//拖动效果
+			$(document).ready(function() {
+			//$(function() {
+				$("#login").draggable();
+			});
+
+		</script>
+		
+	</body>
+</html>

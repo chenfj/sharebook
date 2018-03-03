@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="Admin" type="com.sharebook.entity.Admin"/>
+	</typeAliases>
+	<environments default="development">
+		<environment id="development">
+		<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+			<property name="driver" value="oracle.jdbc.OracleDriver"/>
+			<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
+			<property name="username" value="system"/>
+			<property name="password" value="123456"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+		<mapper resource="com/sharebook/dao/AdminDaoMapper.xml"/>
+		<mapper resource="com/sharebook/dao/UserDaoMapper.xml"/>
+		<mapper resource="com/sharebook/dao/BookDaoMapper.xml"/>
+		<mapper resource="com/sharebook/dao/RemarkDaoMapper.xml"/>
+		<mapper resource="com/sharebook/dao/CategoryDaoMapper.xml"/>
+	</mappers>
+	
+</configuration>

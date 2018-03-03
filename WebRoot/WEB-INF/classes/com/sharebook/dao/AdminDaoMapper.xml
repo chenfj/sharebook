@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sharebook.dao.AdminDao">
+  <resultMap type="com.sharebook.entity.Admin" id="AdminMap">
+  		<id column="aid" property="aid"/>
+  		<result column="login_name" property="loginName"/>
+  		<result column="password" property="password"/>
+  </resultMap>
+	<select id="getAdminByLoginName" parameterType="String" resultMap="AdminMap">
+		select * from admin where login_name=#{loginName}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

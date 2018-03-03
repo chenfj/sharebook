@@ -1,0 +1,102 @@
+
+oracle sql 
+用户表
+create sequence seq_uid;
+create table user_info(usid number primary key,login_name varchar2(30),password varchar2(30),nick_name varchar2(30),email varchar2(50),phone varchar2(15),address varchar2(100),active_code varchar2(70),state number(1),head_img varchar2(100),nofunc number(1));
+
+类别表
+create sequence seq_cid;
+create table category(cid number primary key,category_name varchar2(100));
+
+insert into category values(seq_cid.nextval,'经济理论');
+insert into category values(seq_cid.nextval,'计算机技术');
+insert into category values(seq_cid.nextval,'哲学类');
+insert into category values(seq_cid.nextval,'教科类');
+insert into category values(seq_cid.nextval,'励志类');
+insert into category values(seq_cid.nextval,'经典小说');
+insert into category values(seq_cid.nextval,'少儿读物');
+insert into category values(seq_cid.nextval,'生活休闲类');
+insert into category values(seq_cid.nextval,'其他');
+图书表
+create sequence seq_bid;
+create table book(bid number primary key,book_name varchar2(100),press varchar2(200),author varchar2(200),publish_time date,upload_time date,edition number(1),book_img varchar2(100),deal_type number(1),book_state number(1),cid number,usid number);
+alter table book add constraint fk_cid foreign key(cid) references category(cid);
+alter table book add constraint fk_usid foreign key(usid) references user_info(usid);
+
+评论表
+create sequence seq_rid;
+create table remark(rid number primary key,remark_time date,content varchar2(500),usid number,bid number,remark_state number);
+alter table remark add constraint fk_rb_usid foreign key(usid) references user_info(usid);
+alter table remark add constraint fk_bid foreign key(bid) references book(bid);
+
+insert into remark values(seq_rid.nextval,sysdate,'这本书很好',1,1);
+insert into remark values(seq_rid.nextval,sysdate,'还行',1,1);
+
+select book.*,remark.*, user_info.nick_name,user_info.head_img from book,remark,user_info where remark.bid=book.bid and remark.usid=user_info.usid;
+
+管理员表
+create sequence seq_aid;
+create table admin(aid number primary key,login_name varchar2(30),password varchar2(30));
+insert into admin values(seq_aid.nextval,'admin','123456');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

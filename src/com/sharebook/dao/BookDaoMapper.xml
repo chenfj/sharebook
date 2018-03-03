@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sharebook.dao.BookDao">
+  <resultMap type="com.sharebook.entity.Book" id="BookMap">
+  		<id column="bid" property="bid"/>
+  		<result column="book_name" property="bookName"/>
+  		<result column="author" property="author"/>
+  		<result column="press" property="press"/>
+  		<result column="publish_time" property="publishTime"/>
+  		<result column="upload_time" property="uploadTime"/>
+  		<result column="edition" property="edition"/>
+  		<result column="book_img" property="bookImg"/>
+  		<result column="book_state" property="bookState"/>
+  		<result column="deal_type" property="dealType"/>
+  		<result column="deal_state" property="dealState"/>
+  		<result column="cid" property="category.cid"/>
+  		<result column="category_name" property="category.categoryName"/>
+  		
+  		
+  		<result column="usid" property="user.usid"/>
+  		<result column="head_img" property="user.headimg"/>
+  		<result column="nick_name" property="user.nickName"/>
+  		<result column="phone" property="user.phone"/>
+  		<result column="email" property="user.email"/>
+		<result column="address" property="user.address"/>
+		  		
+  </resultMap>
+  <resultMap type="com.sharebook.entity.BookVo" id="BookVoMap">
+  		<id column="bid" property="bid"/>
+  		<result column="book_name" property="bookName"/>
+  		<result column="author" property="author"/>
+  		<result column="login_name" property="loginName"/>
+  		<result column="nick_name" property="nickName"/>
+  		<result column="upload_time" property="uploadTime"/>
+  		<result column="book_img" property="bookImg"/>
+  		<result column="email" property="email"/>
+  </resultMap>
+  <resultMap type="com.sharebook.entity.BookImgDealTypeVo" id="bidtv">
+  	<id column="bid" property="bid"/>
+  	<result column="book_img" property="bookImg"/>
+  	<result column="deal_type" property="dealType"/>
+  </resultMap>
+  <resultMap type="com.sharebook.entity.BookBaseInfo" id="BookBaseInfo">
+		<id column="bid" property="bid"/>
+  		<result column="book_name" property="bookName"/>
+  		<result column="book_img" property="bookImg"/>
+  		<result column="deal_type" property="dealType"/>
+  		<result column="nick_name" property="nickName"/>
+  		<result column="head_img" property="headimg"/>
+  		<result column="usid" property="usid"/>
+  
+  </resultMap>
+	<insert id="addBook" parameterType="com.sharebook.entity.Book">
+		insert into book(bid,book_name,author,press,publish_time,upload_time,edition,book_img,book_state,deal_type,cid,usid)
+		values(seq_bid.nextval,#{bookName},#{author},#{press},#{publishTime},#{uploadTime},#{edition},#{bookImg},#{bookState},#{dealType},#{category.cid},#{user.usid})
+	</insert>
+	<select id="countMyBooks" parameterType="long" resultType="int">
+		select count(*) from book where usid=#{usid} and book_state=1
+	</select>
+	<select id="countAllUserBooks" resultType="int"> 
+		select count(*) from book where book_state=1
+	</select>
+	<select id="countBooksByCid" parameterType="long" resultType="int"> 
+		select count(*) from book where book_state=1 and cid=#{cid}
+	</select>
+	
+	<select id="countBooksByLikeName" parameterType="java.lang.String" resultType="int"> 
+		select count(*) from book where book_state=1 and book_name like '%${value}%'
+	</select>
+	<select id="countNotAgreeBook" resultType="int"> 
+		select count(*) from book where book_state=0
+	</select>
+	
+	<select id="countBookByManyCrial" parameterType="com.sharebook.entity.BookCondiction" resultType="int"> 
+		select count(*) from book 
+		<where>
+			<if test='bookName!=null and bookName!="" '>
+				and book_name like '%${bookName}%'
+			</if>
+			<if test='author!=null and author!=""'>
+				and author like '%${author}%'
+			</if>
+			<if test='press!=null and press!=""'>
+				and press like '%${press}%'
+			</if>
+			<if test="edition!=0">
+				and edition=#{edition}
+			</if>
+			and book_state=1
+		</where>
+	</select>
+	<update id="changDealState" parameterType="java.util.Map" >
+		update book set deal_state=#{dealState} where bid=#{bid}
+	</update>
+	<select id="findBookByManyCrial" parameterType="java.util.Map" resultMap="bidtv">
+		select * from (select * from (select b.bid,b.book_img,b.deal_type,rownum rn from book b 
+		where 1=1
+			<if test='bc.bookName!=null and bc.bookName!="" '>
+				and book_name like '%${bc.bookName}%'
+			</if>
+			<if test='bc.author!=null and bc.author!=""'>
+				and author like '%${bc.author}%'
+			</if>
+			<if test='bc.press!=null and bc.press!=""'>
+				and press like '%${bc.press}%'
+			</if> -->
+			<if test="bc.edition!=0 and bc.edition!=null">
+				and edition=#{bc.edition}
+			</if>
+			and book_state=1
+		)b1 where b1.rn&gt;(#{pc}-1)*#{ps})b2 where b2.rn&lt;=#{pc}*#{ps}
+	</select>
+	
+	<select id="findBookByLikeName" parameterType="java.util.Map" resultMap="bidtv">
+		select * from (select * from (select b.bid,b.book_img,b.deal_type,rownum rn from book b where book_state=1 and book_name like '%${bookName}%')b1 where b1.rn&gt;(#{pc}-1)*#{ps})b2 where b2.rn&lt;=#{pc}*#{ps}
+	</select>
+	
+	<select id="findUserBooks" parameterType="java.util.Map" resultMap="BookMap">
+		select * from (select * from (select b.*,rownum rn from book b where usid=#{usid} and book_state=1)b1 where b1.rn&gt;(#{pc}-1)*#{ps})b2 where b2.rn&lt;=#{pc}*#{ps}
+	</select>
+	<select id="findBookById" parameterType="long" resultMap="BookMap">
+		select b.*,u.phone,u.head_img,u.email,u.address,u.nick_name,c.category_name from book b,category c,user_info u where b.usid=u.usid and b.cid = c.cid and bid=#{bid}
+	</select>
+	
+	<select id="findBooksByCid" parameterType="java.util.Map" resultMap="bidtv">
+		select * from (select * from (select b.bid,b.book_img,b.deal_type,rownum rn from book b where book_state=1 and cid =#{cid})b1 where b1.rn&gt;(#{pc}-1)*#{ps})b2 where b2.rn&lt;=#{pc}*#{ps}
+	</select>
+	
+	<select id="findAllUserBooks" parameterType="java.util.Map" resultMap="bidtv">
+		select * from (select * from (select b.bid,b.book_img,b.deal_type,rownum rn from book b where book_state=1)b1 where b1.rn&gt;(#{pc}-1)*#{ps})b2 where b2.rn&lt;=#{pc}*#{ps}
+	</select>
+	<select id="findLastNewBook" resultMap="BookBaseInfo">
+		select bc.* from (select rownum rn,b.bid,b.book_name,b.book_img,b.deal_type,u.usid,u.nick_name,u.head_img from book b,user_info u where b.usid = u.usid and b.book_state=1 order by (bid)desc)bc where bc.rn&lt;=6
+	</select>
+	<select id="findSomeNewBook" parameterType="int" resultMap="BookBaseInfo">
+		select b2.* from (select bc.* from (select rownum rn,b.bid,b.book_name,b.book_img,b.deal_type,u.usid,u.nick_name,u.head_img from book b,user_info u where b.usid = u.usid and b.book_state=1)bc where bc.rn&gt;(#{pageNum}-1)*6)b2 where b2.rn&lt;=#{pageNum}*6
+	</select>
+	<update id="modifyBook" parameterType="com.sharebook.entity.Book">
+		update book set book_name=#{bookName},author=#{author},press=#{press},edition=#{edition},publish_time=#{publishTime},deal_type=#{dealType} where bid=#{bid}
+	</update>
+	<update id="delSomeBook" parameterType="java.util.Map">
+		update book set book_state=2
+		<where>
+			<if test="bids!=null">
+				<foreach collection="bids" item="bid" open="and (" close=")" separator="or">
+					bid=#{bid}
+				</foreach>
+			</if>
+		</where> 
+	</update>
+	<select id="findAllBooks" resultMap="BookVoMap">
+		select b2.* from (select b1.* from (select b.bid,rownum rn,b.book_name,b.author,b.book_img,u.login_name,u.email,u.nick_name,b.upload_time from book b,user_info u where b.usid=u.usid and b.book_state=1)b1 where b1.rn&gt;(#{pc}-1)*#{ps})b2 where b2.rn&lt;=#{pc}*#{ps}
+	</select>
+	<select id="findNotAgreeBook"  resultMap="BookVoMap">
+		select b2.* from (select b1.* from (select rownum rn,book.bid,book.book_name,book.author,book.book_img,user_info.login_name,user_info.email,user_info.nick_name,book.upload_time from book,user_info where book.usid=user_info.usid and book.book_state=0)b1 where b1.rn&gt;(#{pc}-1)*#{ps})b2 where b2.rn&lt;=#{pc}*#{ps}
+	</select>
+	<update id="agreeAddBook" parameterType="long">
+		update book set book_state=1 where bid=#{bid}
+	</update>
+	<update id="delAdminBook" parameterType="long">
+		update book set book_state=2 where bid=#{bid}
+	</update>
+	<update id="notAgreeAddBook" parameterType="long">
+		update book set book_state=2 where bid=#{bid}
+	</update>
+	<select id="findSomeBookImgs" resultMap="bidtv">
+		select b.* from (select bid,book_img,deal_type,rownum rn from book where book_state=1)b where b.rn&lt;=8
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
